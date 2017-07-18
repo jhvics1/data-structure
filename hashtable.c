@@ -2,6 +2,7 @@
 #include "stdlib.h"
 
 #define MAX_LEN (10000)
+#define NULL    (0)
 
 typedef struct table_item {
 	unsigned long hash_value;
@@ -14,7 +15,7 @@ typedef struct hashtable {
 	int item_count;
 }st_hashtable;
 
-static struct hashtable * ht = 0;
+static struct hashtable * ht = NULL;
 
 unsigned long get_value_hash1(unsigned char* str)
 {
@@ -37,18 +38,18 @@ void init_table(int size)
 		for(int index = 0 ; index < ht->table_size ; index++)
 		{
 			if(ht->items[index] != 0) free(ht->items[index]);
-			ht->items[index] = 0;
+			ht->items[index] = NULL;
 		}
 		free(ht);
-		ht = 0;
+		ht = NULL;
 	}
 
-	ht = malloc (sizeof(struct hashtable));
+	ht = malloc (sizeof(st_hashtable));
 	ht->table_size = (unsigned long)size;
-	ht->items = malloc (sizeof (struct table_item) * size);
+	ht->items = malloc (sizeof (st_table_item) * size);
 	for(int index = 0 ; index < ht->table_size ; index++)
 	{
-		ht->items[index] = 0;
+		ht->items[index] = NULL;
 	}
 	ht->item_count = 0;
 }
@@ -56,17 +57,17 @@ void init_table(int size)
 void put_into_table(char* value)
 {
 	unsigned long hash = get_value_hash1((unsigned char*)value);
-	struct table_item * item = ht->items[ hash % ht->table_size ];
+	st_table_item * item = ht->items[ hash % ht->table_size ];
 
 	printf("PUT Index : %d \t hash : %u \t value : %s\n", (hash%ht->table_size), hash, value );
 
-	while(item != 0)
+	while(item != NULL)
 	{
 		if(item->hash_value == hash) return;
 		item = item->next;
 	}
 
-	if( (item = malloc(sizeof(struct table_item)) ) == 0)
+	if( (item = malloc(sizeof(struct table_item)) ) == NULL)
 	{
 		printf("ERROR~~~~~~~~!!!!\n");
 			return;
@@ -85,13 +86,13 @@ void delete_from_table(char* value)
 		printf("DEL hash : %u\n", hash);
 		struct table_item * item = ht->items[ hash % ht->table_size ];
 
-		struct table_item * prev = 0;
-		while(item != 0)
+		struct table_item * prev = NULL;
+		while(item != NULL)
 		{
 			printf("\t item hash : %u\n", item->hash_value);
 			if(item->hash_value == hash)
 			{
-				if(prev == 0)
+				if(prev == NULL)
 				{
 					printf("\t\tFirst item in hash array\n");
 					ht->items[ hash % ht->table_size ] = item->next;
@@ -119,7 +120,7 @@ void print_table()
 		for(int pos = 0 ; pos < ht->table_size ; pos++)
 		{
 			struct table_item * item = ht->items[ pos ];
-			while(item != 0)
+			while(item != NULL)
 			{
 				printf("PRN Index : %d \t hash : %u\n", pos, item->hash_value);
 				item = item->next;
@@ -127,4 +128,5 @@ void print_table()
 		}
 	}
 }
+
 
