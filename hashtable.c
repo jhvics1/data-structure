@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "stdlib.h"
+
 #define MAX_LEN (10000)
 
 typedef struct table_item {
@@ -52,12 +53,12 @@ void init_table(int size)
 	ht->item_count = 0;
 }
 
-void put_table(char* value)
+void put_into_table(char* value)
 {
 	unsigned long hash = get_value_hash1((unsigned char*)value);
 	struct table_item * item = ht->items[ hash % ht->table_size ];
 
-	printf("PUT Index : %d \t value %s \t hash : %u\n", (hash%ht->table_size), value, hash );
+	printf("PUT Index : %d \t hash : %u \t value : %s\n", (hash%ht->table_size), hash, value );
 
 	while(item != 0)
 	{
@@ -81,13 +82,13 @@ void delete_from_table(char* value)
 	if(ht->item_count > 0)
 	{
 		unsigned long hash = get_value_hash1((unsigned char*)value);
-		printf("DELETE value : %u\n", hash);
+		printf("DEL hash : %u\n", hash);
 		struct table_item * item = ht->items[ hash % ht->table_size ];
 
 		struct table_item * prev = 0;
 		while(item != 0)
 		{
-			printf("\t item value : %u\n", item->hash_value);
+			printf("\t item hash : %u\n", item->hash_value);
 			if(item->hash_value == hash)
 			{
 				if(prev == 0)
@@ -120,7 +121,7 @@ void print_table()
 			struct table_item * item = ht->items[ pos ];
 			while(item != 0)
 			{
-				printf("PRINT Index : %d \t value : %u\n", pos, item->hash_value);
+				printf("PRN Index : %d \t hash : %u\n", pos, item->hash_value);
 				item = item->next;
 			}
 		}
