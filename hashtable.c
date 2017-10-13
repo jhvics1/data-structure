@@ -1,5 +1,4 @@
 #include "stdio.h"
-#include "stdlib.h"
 
 #define MAX_LEN (10000)
 #define NULL    (0)
